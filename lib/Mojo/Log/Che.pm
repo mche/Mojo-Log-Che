@@ -131,7 +131,7 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-Mojo::Log::Che - Little extend Mojo::Log 
+Mojo::Log::Che - Little extended of parent Mojo::Log.
 
 =head1 SYNOPSIS
 
@@ -174,7 +174,7 @@ This B<Mojo::Log::Che> is a extended logger module for L<Mojo> projects.
 
 =head1 EVENTS
 
-L<Mojo::Log::Che> inherits all events from L<Mojo::EventEmitter> and can emit the
+B<Mojo::Log::Che> inherits all events from L<Mojo::EventEmitter> and can emit the
 following new ones.
 
 =head2 message
