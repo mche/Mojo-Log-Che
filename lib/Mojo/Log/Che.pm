@@ -183,12 +183,12 @@ See parent L<Mojo::Log/"message">.
 
 =head1 ATTRIBUTES
 
-L<Mojo::Log::Che> inherits all attributes from L<Mojo::Log> and implements the
+B<Mojo::Log::Che> inherits all attributes from L<Mojo::Log> and implements the
 following new ones.
 
 =head2 handle
 
-See parent L<Mojo::Log/"handle">. This is default handler for file L</"path". There are diffrent L</"handlers"> when L</"path"> as forder/dir or difined L</"paths"> for levels. Compatible L<Mojo::Log> reason.
+See parent L<Mojo::Log/"handle">. This is default handler for file L</"path">. There are diffrent L</"handlers"> when L</"path"> as forder/dir or defined L</"paths"> for levels. Compatible L<Mojo::Log> reason.
 
 =head2 handlers
 
@@ -216,7 +216,7 @@ Hashref map level names to absolute or relative to L</"path">
 
 =head1 METHODS
 
-L<Mojo::Log::Che> inherits all methods from L<Mojo::Log> and implements the
+B<Mojo::Log::Che> inherits all methods from L<Mojo::Log> and implements the
 following new ones.
 
 =head2 handler($level)
