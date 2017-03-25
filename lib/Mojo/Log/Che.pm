@@ -131,7 +131,7 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-Mojo::Log::Che - Little extended of parent Mojo::Log.
+Mojo::Log::Che - Little child of big parent Mojo::Log.
 
 =head1 SYNOPSIS
 
