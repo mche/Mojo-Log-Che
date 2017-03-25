@@ -229,7 +229,10 @@ Return file handler overwise.
 
 Autoloads levels excepts already defined keywords of parent modules L<Mojo::Log>, L<Mojo::EventEmitter>, L<Mojo::Base>:
 
-  qw(message _message format _format _time_format handle handler handlers history level max_history_size  path paths append debug  error fatal info is_level  new warn  catch emit  has_subscribers on  once subscribers unsubscribe has  attr tap _monkey_patch import)
+  qw(message _message format _format _time_format handle handler handlers
+  history level max_history_size  path paths append debug  error fatal info
+  is_level  new warn  catch emit  has_subscribers on  once subscribers unsubscribe
+  has  attr tap _monkey_patch import)
 
 and maybe anymore!
 
