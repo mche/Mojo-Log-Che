@@ -146,24 +146,24 @@ Mojo::Log::Che - Little extend Mojo::Log
   # MAIN THINGS
   # Set "path" to folder + have default "paths" for levels
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo');
-  $log->warn('This might be a problem');# loggin to /var/log/mojo/warn.log
-  $log->error('Garden variety error'); # loggin to /var/log/mojo/error.log
-  $log->foo('BAR here');# loggin to /var/log/mojo/foo.log
+  $log->warn('This might be a problem');#  /var/log/mojo/warn.log
+  $log->error('Garden variety error'); #  /var/log/mojo/error.log
+  $log->foo('BAR here');#  /var/log/mojo/foo.log
   
   # set "path" to folder + set custom relative "paths"
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo', paths=>{debug=>'dbg.log', foo=>'myfoo.log'});
-  $log->debug('Not sure what is happening here'); # loggin to /var/log/mojo/dbg.log
-  $log->warn('This might be a problem');# loggin to /var/log/mojo/warn.log
-  $log->foo('BAR here');# loggin to /var/log/mojo/myfoo.log
+  $log->debug('Not sure what is happening here'); #  /var/log/mojo/dbg.log
+  $log->warn('This might be a problem');# /var/log/mojo/warn.log
+  $log->foo('BAR here');#  /var/log/mojo/myfoo.log
   
   # set "path" to file + have default "paths" for levels
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo.log');
-  $log->debug('Not sure what is happening here'); # loggin to /var/log/mojo.log
-  $log->warn('This might be a problem');# loggin to /var/log/mojo.log
-  $log->foo('BAR here');# loggin to /var/log/mojo.log
+  $log->debug('Not sure what is happening here'); #  /var/log/mojo.log
+  $log->warn('This might be a problem');#  /var/log/mojo.log
+  $log->foo('BAR here');# /var/log/mojo.log
   
-  # set "path" to undef - log to STDERR + set custom absolute "paths"
-  $log->path(undef); # none 
+  # Log to STDERR + set custom absolute "paths"
+  $log->path(undef); # none path
   $log->paths->{'error'} = '/var/log/error.log'; # absolute only error level
   $log->info(...); # log to STDERR
   
@@ -179,7 +179,7 @@ following new ones.
 
 =head2 message
 
-See parent L<Mojo::Log/"message">
+See parent L<Mojo::Log/"message">.
 
 =head1 ATTRIBUTES
 
@@ -188,15 +188,17 @@ following new ones.
 
 =head2 handle
 
-See parent L<Mojo::Log/"handle">. This is default handler for file L</"path" L<Mojo::Log> compatible. There are diffrent L</"handlers"> when L</"path"> as forder/dir.
+See parent L<Mojo::Log/"handle">. This is default handler for file L</"path". There are diffrent L</"handlers"> when L</"path"> as forder/dir or difined L</"paths"> for levels. Compatible L<Mojo::Log> reason.
 
 =head2 handlers
 
-Hashref of created file handlers for stanard and custom levels L</"paths">.
+Hashref of created file handlers for standard and custom levels.
+
+  $log->handlers->{'foo'} = IO::Handle->new();
 
 =head2 path
 
-See parent L<Mojo::Log/"path">. Log file path used by L</"handle"> if L</"path"> is file.
+See parent L<Mojo::Log/"path">. Log file path used by L</"handle"> if L</"path"> is file or undef. Compatible reason.
 
 =head2 paths
 
@@ -219,7 +221,7 @@ following new ones.
 
 =head2 handler($level)
 
-Return undef when L</"path"> undefined or L</"path"> is file or has not defined L</"paths"> for $level. But L<Mojo::Log/"handle"> will return handler.
+Return undef when L</"path"> undefined or L</"path"> is file or has not defined L</"paths"> for $level. In this case L<Mojo::Log/"handle"> will return default handler.
 
 Return file handler overwise.
 
