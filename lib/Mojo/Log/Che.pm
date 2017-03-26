@@ -124,16 +124,18 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 NAME
 
-Mojo::Log::Che - Little child of big parent Mojo::Log.
+Mojo::Log::Che - Little child of great parent Mojo::Log.
 
 =head1 SYNOPSIS
 
   use Mojo::Log::Che;
   
-  # Parent Mojo::Log behavior must works
+  # Parent Mojo::Log behavior just works
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo.log', level => 'warn');
-  
-  # MAIN THINGS this module
+  $log->debug(...);
+
+=head2 EXTENDED THINGS of this module
+
   # Set "path" to folder + have default "paths" for levels (be sure that mkdir /var/log/mojo)
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo'); 
   $log->warn(...);# log to  /var/log/mojo/warn.log
@@ -179,26 +181,21 @@ B<Mojo::Log::Che> inherits all events from L<Mojo::Log> and override following o
 
 =head2 message
 
-See parent L<Mojo::Log/"message">. Extends parent module logics.
+See also parent L<Mojo::Log/"message">. Extends parent module logics for switching handlers.
 
 =head1 ATTRIBUTES
 
-B<Mojo::Log::Che> inherits all attributes from L<Mojo::Log> and implements the
-following new ones.
-
-=head2 handle
-
-See parent L<Mojo::Log/"handle">. This is default handler for file L</"path">. There are diffrent L</"handlers"> when L</"path"> as forder/dir or defined L</"paths"> for levels. Compatible L<Mojo::Log> reason.
+B<Mojo::Log::Che> inherits all attributes from L<Mojo::Log and implements the following new ones.
 
 =head2 handlers
 
-Hashref of created file handlers for standard and custom levels.
+Hashref of created file handlers for standard and custom levels. For standard parent L<Mojo::Log> logic none handlers but L<Mojo::Log/"handle"> will be in the scene.
 
   $log->handlers->{'foo'} = IO::Handle->new();
 
 =head2 path
 
-See parent L<Mojo::Log/"path">. Log file path used by L</"handle"> if L</"path"> is file or undef. Compatible reason.
+See parent L<Mojo::Log/"path">. Can set to folder and file path.
 
 =head2 paths
 
@@ -211,6 +208,7 @@ Hashref map level names to absolute or relative to L</"path">
   
   $log->path(undef); # none 
   $log->paths->{'error'} = '/var/log/error.log'; # absolute path only error level
+  $log->error(...); # log to /var/log/error.log
   $log->info(...); # log to STDERR
 
 
