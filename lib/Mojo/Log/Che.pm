@@ -129,36 +129,44 @@ Mojo::Log::Che - Little child of big parent Mojo::Log.
 =head1 SYNOPSIS
 
   use Mojo::Log::Che;
-
-  # Log to STDERR
-  my $log = Mojo::Log::Che->new;
-
-  # Customize log file location and minimum log level
+  
+  # Parent Mojo::Log behavior must works
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo.log', level => 'warn');
   
-  # MAIN THINGS
-  # Set "path" to folder + have default "paths" for levels
-  my $log = Mojo::Log::Log->new(path => '/var/log/mojo');
-  $log->warn('This might be a problem');#  /var/log/mojo/warn.log
-  $log->error('Garden variety error'); #  /var/log/mojo/error.log
-  $log->foo('BAR here');#  /var/log/mojo/foo.log
+  # MAIN THINGS this module
+  # Set "path" to folder + have default "paths" for levels (be sure that mkdir /var/log/mojo)
+  my $log = Mojo::Log::Log->new(path => '/var/log/mojo'); 
+  $log->warn(...);# log to  /var/log/mojo/warn.log
+  $log->error(...); # log to  /var/log/mojo/error.log
+  $log->foo(...);# log to  /var/log/mojo/foo.log
   
-  # set "path" to folder + set custom relative "paths"
+  # set "path" to folder + set custom relative "paths" (be sure that mkdir /var/log/mojo)
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo', paths=>{debug=>'dbg.log', foo=>'myfoo.log'});
-  $log->debug('Not sure what is happening here'); #  /var/log/mojo/dbg.log
-  $log->warn('This might be a problem');# /var/log/mojo/warn.log
-  $log->foo('BAR here');#  /var/log/mojo/myfoo.log
+  $log->debug(...); # log to  /var/log/mojo/dbg.log
+  $log->warn(...);# log to /var/log/mojo/warn.log
+  $log->foo(...);# log to  /var/log/mojo/myfoo.log
   
   # set "path" to file + have default "paths" for levels
+  # this is standard Mojo::Log behavior + custom level/method also
   my $log = Mojo::Log::Log->new(path => '/var/log/mojo.log');
-  $log->debug('Not sure what is happening here'); #  /var/log/mojo.log
-  $log->warn('This might be a problem');#  /var/log/mojo.log
-  $log->foo('BAR here');# /var/log/mojo.log
+  $log->debug(...); # log to  /var/log/mojo.log
+  $log->warn(...);# log to  /var/log/mojo.log
+  $log->foo(...);# log to /var/log/mojo.log
+  
+  # set "path" to file + set custom absolute "paths"
+  my $log = Mojo::Log::Log->new(path => '/var/log/mojo.log', paths => {error=>'/var/log/mojo.error.log'});
+  $log->debug(...); # log to  /var/log/mojo.log
+  $log->foo(...);# log to /var/log/mojo.log
+  $log->error(...);  # log to /var/log/mojo.error.log
   
   # Log to STDERR + set custom absolute "paths"
   $log->path(undef); # none path
-  $log->paths->{'error'} = '/var/log/error.log'; # absolute only error level
+  $log->level('info');
+  $log->paths->{'error'} = '/var/log/error.log'; # absolute file only for error level
+  $log->error(...);  # log to /var/log/error.log
   $log->info(...); # log to STDERR
+  $log->debug(...); # no log
+  $log->foo(...); # anyway log to STDERR
   
 
 =head1 DESCRIPTION
@@ -167,12 +175,11 @@ This B<Mojo::Log::Che> is a extended logger module for L<Mojo> projects.
 
 =head1 EVENTS
 
-B<Mojo::Log::Che> inherits all events from L<Mojo::EventEmitter> and can emit the
-following new ones.
+B<Mojo::Log::Che> inherits all events from L<Mojo::Log> and override following ones.
 
 =head2 message
 
-See parent L<Mojo::Log/"message">.
+See parent L<Mojo::Log/"message">. Extends parent module logics.
 
 =head1 ATTRIBUTES
 
