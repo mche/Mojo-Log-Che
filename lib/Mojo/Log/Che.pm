@@ -116,7 +116,7 @@ our $VERSION = '0.02';
 
 =head1 Mojo::Log::Che
 
-¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !
+I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
