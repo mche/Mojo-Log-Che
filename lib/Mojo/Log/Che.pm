@@ -29,24 +29,20 @@ sub handler {
   my $is_dir = -d -w $path
     if $path;
   
-  # STDERR or FILE
-  return
-    unless $is_dir || $path_level;
-  
   my $file;
-  
-  if (!$path && $path_level) {# absolute paths when none path
-    $file = $path_level;
-  }
-  elsif ($is_dir) {# DIR
+  if ($is_dir) {# DIR
+    # relative path for level
     chop($path)
       if $path =~ /\/$/;
     
     $file = sprintf "%s/%s", $path, $path_level ||"$level.log";
-    
+  }
+  elsif ($path_level) {# absolute FILE for level
+    $file = $path_level;
   }
   else {
-    croak "Cant create log handler for level=[$level] and path=[$path] (also check filesystem permissions)";
+    #~ croak "Cant create log handler for level=[$level] and path=[$path] (also check filesystem permissions)";
+    return; # Parent way to handle
   }
   
   $handler = Mojo::File->new($file)->open('>>:encoding(UTF-8)')
@@ -67,20 +63,19 @@ sub append {
   flock $handle, LOCK_UN;
 }
 
+my @mon = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+my @wday = qw(Sn Mn Ts Wn Th Fr St);
 sub _format {
   my ($time, $level) = (shift, shift);
   $level = "[$level] "
     if $level //= '';
-  return '[' . _time_format($time) . "] $level" . join "\n", @_, '';
+  
+  my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime($time);
+  $time = sprintf "%s %s %s %s:%s:%s", $wday[$wday], $mday, map(length == 1 ? "0$_" : $_, $mon[$mon], $hour, $min, $sec);
+  
+  return "[$time] $level" . join "\n", @_, '';
 }
 
-my @mon = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
-my @wday = qw(Sn Mn Ts Wn Th Fr St);
-sub _time_format {
-  my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime(shift);
-  return sprintf "%s %s %s %s:%s:%s", $wday[$wday], $mday, map(length == 1 ? "0$_" : $_, $mon[$mon], $hour, $min, $sec);
-
-}
 
 sub _message {
   my ($self, $level) = (shift, shift);
@@ -113,9 +108,7 @@ sub AUTOLOAD {
   
 }
 
-our $VERSION = '0.01';
-
-1;
+our $VERSION = '0.02';
 
 =encoding utf8
 
@@ -127,7 +120,7 @@ our $VERSION = '0.01';
 
 =head1 VERSION
 
-0.01
+0.02
 
 =head1 NAME
 
@@ -227,9 +220,9 @@ Return file handler overwise.
 
 =head1 AUTOLOAD
 
-Autoloads levels excepts already defined keywords of parent modules L<Mojo::Log>, L<Mojo::EventEmitter>, L<Mojo::Base>:
+Autoloads nonstandard/custom levels excepts already defined keywords of this and parent modules L<Mojo::Log>, L<Mojo::EventEmitter>, L<Mojo::Base>:
 
-  qw(message _message format _format _time_format handle handler handlers
+  qw(message _message format _format handle handler handlers
   history level max_history_size  path paths append debug  error fatal info
   is_level  new warn  catch emit  has_subscribers on  once subscribers unsubscribe
   has  attr tap _monkey_patch import)
@@ -238,6 +231,8 @@ and maybe anymore!
 
 
   $log->foo('bar here');
+
+That custom levels log always without reducing log output outside of level.
 
 =head1 SEE ALSO
 
