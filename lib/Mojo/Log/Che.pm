@@ -108,7 +108,7 @@ sub AUTOLOAD {
   
 }
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =encoding utf8
 
@@ -120,7 +120,7 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
-0.02
+0.03
 
 =head1 NAME
 
