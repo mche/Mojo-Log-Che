@@ -4,6 +4,10 @@ use Mojo::Base 'Mojo::Log';
 use Carp 'croak';
 use Fcntl ':flock';
 use Mojo::File;
+#~ use Debug::LTrace qw/Mojo::Log::_log/;;
+#~ use Carp::Trace;
+#~ use Encode qw(decode_utf8);
+#~ binmode STDERR, ":utf8";
 
 has paths => sub { {} };
 has handlers => sub { {} };
@@ -73,7 +77,16 @@ sub _format {
   my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime($time);
   $time = sprintf "%s %s %s %s:%s:%s", $wday[$wday], $mday, map(length == 1 ? "0$_" : $_, $mon[$mon], $hour, $min, $sec);
   
-  return "[$time] $level" . join "\n", @_, '';
+  my $trace =  join " ", @{_trace()}[1..2];
+  
+  return "[$time] [$trace] $level" . join "\n", @_, '';
+}
+
+sub _trace {
+  my $start = shift // 1;
+  my @frames;
+  while (my @trace = caller($start++)) { push @frames, \@trace }
+  return pop @frames;
 }
 
 
@@ -108,7 +121,7 @@ sub AUTOLOAD {
   
 }
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =encoding utf8
 
@@ -120,7 +133,7 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
-0.03
+0.04
 
 =head1 NAME
 

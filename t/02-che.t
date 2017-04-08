@@ -4,6 +4,7 @@ use Test::More;
 use Mojo::File qw(path tempdir);
 use Mojo::Log::Che;
 use Mojo::Util qw'decode';
+#~ binmode STDERR, ":utf8";
 
 # Logging to folder
 my $dir  = tempdir();
@@ -81,7 +82,7 @@ undef $log;
 $content = decode 'UTF-8', path($file)->slurp;
 like $content,   qr/\[.*\] \[fatal\] I ♥ Mojolicious/, 'right fatal message';
 #~ like $content, qr/\[.*\] \[debug\] Does not work/,     'no debug message';
-like $content,   qr/\[.*\] \[foo\] Foo level/,        'right foo message';
+like $content,   qr/\[.*\] \[foo\] Foo level/,        'right foo level';
 $content = decode 'UTF-8', path($file2)->slurp;
 like $content,   qr/\[.*\] Just works/,        'right error message';
 eval {path($file3)->slurp};
@@ -108,6 +109,6 @@ unlike $content, qr/^\[.*\] \[error\] Just works\n/m,        'right error messag
 like $content, qr/^\[.*\] \[info\] I ♥ Mojolicious\n/m, 'right info message';
 like $content, qr/^\[.*\] \[debug\] Works too\n/m,         'right debug message';
 $content = decode 'UTF-8', path($file)->slurp;
-like $content,   qr/^\[.*\] Уникод level/m,        'right foo message';
+like $content,   qr/^\[.*\] Уникод level/m,        'right Уникод message';
 
 done_testing();
