@@ -106,7 +106,7 @@ sub _message {
   my $time = time;
   my $trace = _trace($self->trace)
     if $self->trace;
-  unshift @_, '['. join(" ", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]) .']'
+  unshift @_, '['. join(":", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]) .'] '. shift
     if $trace && @$trace;
   push @$history, my $msg = [$time, $level, @_];
   shift @$history while @$history > $max;
