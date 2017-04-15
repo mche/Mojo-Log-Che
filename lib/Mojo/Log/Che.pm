@@ -85,13 +85,14 @@ sub _format {
 
 sub _trace {
   my $start = shift // 1;
-  return [caller($start)];
-  my @frames;
-  while (my @trace = caller($start++)) { push @frames, \@trace }
-  #~ warn join "\t", @$_[1..2] for @frames;
-  #~ say STDERR "FRAMES: ", scalar @frames;
-  #~ return pop @frames;
-  return $frames[4];
+  my @call = caller($start);
+  return \@call
+    if @call;
+  #~ my @frames;
+  $start = 1;
+  while (my @trace = caller($start++)) { push @call, \@trace }
+  return pop @call;
+  #~ return $frames[4];
 }
 
 
@@ -103,8 +104,10 @@ sub _message {
   my $max     = $self->max_history_size;
   my $history = $self->history;
   my $time = time;
-  unshift @_, '['. join(" ", @{_trace($self->trace)}[1..2]) .']'
+  my $trace = _trace($self->trace)
     if $self->trace;
+  unshift @_, '['. join(" ", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]) .']'
+    if $trace && @$trace;
   push @$history, my $msg = [$time, $level, @_];
   shift @$history while @$history > $max;
   
@@ -128,7 +131,7 @@ sub AUTOLOAD {
   
 }
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =encoding utf8
 
@@ -140,7 +143,7 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
-0.05
+0.06
 
 =head1 NAME
 
