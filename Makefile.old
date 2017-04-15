@@ -61,11 +61,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = Mojo::Log::Che
 NAME_SYM = Mojo_Log_Che
-VERSION = 0.04
+VERSION = 0.05
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_04
+VERSION_SYM = 0_05
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.04
+XS_VERSION = 0.05
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -259,7 +259,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = Mojo-Log-Che
-DISTVNAME = Mojo-Log-Che-0.04
+DISTVNAME = Mojo-Log-Che-0.05
 
 
 # --- MakeMaker macro section:
@@ -507,7 +507,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Mojolicious: '\''7.26'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) '  perl: '\''5.01'\''' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: '\''0.04'\''' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: '\''0.05'\''' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
@@ -550,7 +550,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "0.04"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "0.05"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -859,7 +859,7 @@ testdb_static :: static pure_all
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="Mojo-Log-Che" VERSION="0.04">' > Mojo-Log-Che.ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="Mojo-Log-Che" VERSION="0.05">' > Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Little child of great parent Mojo::Log.</ABSTRACT>' >> Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>ÐÐ¸ÑÐ°Ð¸Ð» Ð§Ðµ (Mikhail Che) &lt;mche[-at-]cpan.org&gt;</AUTHOR>' >> Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> Mojo-Log-Che.ppd

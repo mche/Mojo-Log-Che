@@ -11,6 +11,7 @@ use Mojo::File;
 
 has paths => sub { {} };
 has handlers => sub { {} };
+has trace => 4;
 
 # Standard log levels
 my %LEVEL = (debug => 1, info => 2, warn => 3, error => 4, fatal => 5);
@@ -77,16 +78,20 @@ sub _format {
   my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime($time);
   $time = sprintf "%s %s %s %s:%s:%s", $wday[$wday], $mday, map(length == 1 ? "0$_" : $_, $mon[$mon], $hour, $min, $sec);
   
-  my $trace =  join " ", @{_trace()}[1..2];
+  #~ my $trace =  '['. join(" ", @{_trace()}[1..2]) .']';
   
-  return "[$time] [$trace] $level" . join "\n", @_, '';
+  return "[$time] $level" . join "\n", @_, '';
 }
 
 sub _trace {
   my $start = shift // 1;
+  return [caller($start)];
   my @frames;
   while (my @trace = caller($start++)) { push @frames, \@trace }
-  return pop @frames;
+  #~ warn join "\t", @$_[1..2] for @frames;
+  #~ say STDERR "FRAMES: ", scalar @frames;
+  #~ return pop @frames;
+  return $frames[4];
 }
 
 
@@ -98,6 +103,8 @@ sub _message {
   my $max     = $self->max_history_size;
   my $history = $self->history;
   my $time = time;
+  unshift @_, '['. join(" ", @{_trace($self->trace)}[1..2]) .']'
+    if $self->trace;
   push @$history, my $msg = [$time, $level, @_];
   shift @$history while @$history > $max;
   
@@ -121,7 +128,7 @@ sub AUTOLOAD {
   
 }
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =encoding utf8
 
@@ -133,7 +140,7 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
-0.04
+0.05
 
 =head1 NAME
 
@@ -224,6 +231,9 @@ Hashref map level names to absolute or relative to L</"path">
   $log->error(...); # log to /var/log/error.log
   $log->info(...); # log to STDERR
 
+=head2 trace
+
+An trace level, defaults to C<4>, C<0> value will disable trace log. This value pass to C<caller()>.
 
 =head1 METHODS
 
