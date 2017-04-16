@@ -72,7 +72,7 @@ my @mon = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 my @wday = qw(Sn Mn Ts Wn Th Fr St);
 sub _format {
   my ($time, $level) = (shift, shift);
-  $level = "[$level] "
+  $level = '['.($LEVEL{$level} ? ($level =~ /^(\w)/)[0] : $level) . '] ' #"[$level] "
     if $level //= '';
   
   my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime($time);
@@ -80,7 +80,7 @@ sub _format {
   
   #~ my $trace =  '['. join(" ", @{_trace()}[1..2]) .']';
   
-  return "[$time] $level" . join "\n", @_, '';
+  return "$time $level" . join "\n", @_, '';
 }
 
 sub _trace {
@@ -90,9 +90,11 @@ sub _trace {
     if @call;
   #~ my @frames;
   $start = 1;
-  while (my @trace = caller($start++)) { push @call, \@trace }
-  return pop @call;
+  #~ while (my @trace = caller($start++)) { push @call, \@trace }
+  #~ return pop @call;
+  while (@call = caller($start++)) { 1; }
   #~ return $frames[4];
+  return \@call;
 }
 
 
@@ -106,7 +108,7 @@ sub _message {
   my $time = time;
   my $trace = _trace($self->trace)
     if $self->trace;
-  unshift @_, '['. join(":", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]) .'] '. shift
+  unshift @_, join(":", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]). ' ' . shift
     if $trace && @$trace;
   push @$history, my $msg = [$time, $level, @_];
   shift @$history while @$history > $max;

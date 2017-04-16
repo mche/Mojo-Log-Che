@@ -6,6 +6,9 @@ use Mojo::Log::Che;
 use Mojo::Util qw'decode';
 #~ binmode STDERR, ":utf8";
 
+my $time_re = qr/\w{2} \d{1,2} \w{3} \d{2}:\d{2}:\d{2}/;
+my $line_re = qr/t\/02-che.t:\d+/;
+
 # Logging to folder
 my $dir  = tempdir();
 my $log  = Mojo::Log::Che->new(level => 'error', path => $dir);
@@ -22,9 +25,9 @@ undef $log;
 my $content_err = decode 'UTF-8', path("$dir/error.log")->slurp;
 my $content_i = decode 'UTF-8', path("$dir/fatal.log")->slurp;
 my $content_foo = decode 'UTF-8', path("$dir/foo.log")->slurp;
-like $content_err,   qr/\[.*\] \[t\/02-che.t:\d+\] Just works/,        'right error message';
-like $content_i,   qr/\[.*\] \[t\/02-che.t:\d+\] I ♥ Mojolicious/, 'right info message';
-like $content_foo,   qr/\[.*\] \[t\/02-che.t:\d+\] Foo level/,        'right foo message';
+like $content_err,   qr/$time_re $line_re Just works/,        'right error message';
+like $content_i,   qr/$time_re $line_re I ♥ Mojolicious/, 'right info message';
+like $content_foo,   qr/$time_re $line_re Foo level/,        'right foo message';
 eval {path("$dir/debug.log")->slurp};
 #~ like $@, qr/No such file or directory/, 'no debug file';
 is defined $@, 1, 'no debug file';
@@ -45,9 +48,9 @@ undef $log;
 $content_err = decode 'UTF-8', path("$dir/err.log")->slurp;
 $content_foo = decode 'UTF-8', path("$dir/bar.log")->slurp;
 $content_i = decode 'UTF-8', path("$dir/fatal.log")->slurp;
-like $content_i,   qr/\[.*\] \[t\/02-che.t:\d+\] I ♥ Mojolicious/, 'right fatal message';
-like $content_err,   qr/\[.*\] \[t\/02-che.t:\d+\] Just works/,        'right error message';
-like $content_foo,   qr/\[.*\] \[t\/02-che.t:\d+\] Foo level/,        'right foo message';
+like $content_i,   qr/$time_re $line_re I ♥ Mojolicious/, 'right fatal message';
+like $content_err,   qr/$time_re $line_re Just works/,        'right error message';
+like $content_foo,   qr/$time_re $line_re Foo level/,        'right foo message';
 undef $dir;
 
 # Logging to file + have default "paths" for levels
@@ -61,10 +64,10 @@ $log->foo('Foo level');
 is scalar keys %{$log->handlers}, 0, 'right 0 handlers';
 undef $log;
 my $content = decode 'UTF-8', path($file)->slurp;
-like $content,   qr/\[.*\] \[error\] \[t\/02-che.t:\d+\] Just works/,        'right error message';
-like $content,   qr/\[.*\] \[fatal\] \[t\/02-che.t:\d+\] I ♥ Mojolicious/, 'right fatal message';
-unlike $content, qr/\[.*\] \[debug\] \[t\/02-che.t:\d+\] Does not work/,     'no debug message';
-like $content,   qr/\[.*\] \[foo\] \[t\/02-che.t:\d+\] Foo level/,        'right foo message';
+like $content,   qr/$time_re \[e\] $line_re Just works/,        'right error message';
+like $content,   qr/$time_re \[f\] $line_re I ♥ Mojolicious/, 'right fatal message';
+unlike $content, qr/$time_re \[d\] $line_re Does not work/,     'no debug message';
+like $content,   qr/$time_re \[foo\] $line_re Foo level/,        'right foo message';
 undef $dir;
 
 # Logging to file + custom paths for levels
@@ -80,11 +83,11 @@ $log->foo('Foo level');
 is scalar keys %{$log->handlers}, 1, 'right 1 handlers';
 undef $log;
 $content = decode 'UTF-8', path($file)->slurp;
-like $content,   qr/\[.*\] \[fatal\] \[t\/02-che.t:\d+\] I ♥ Mojolicious/, 'right fatal message';
-#~ like $content, qr/\[.*\] \[debug\] Does not work/,     'no debug message';
-like $content,   qr/\[.*\] \[foo\] \[t\/02-che.t:\d+\] Foo level/,        'right foo level';
+like $content,   qr/$time_re \[f\] $line_re I ♥ Mojolicious/, 'right fatal message';
+#~ like $content, qr/$time_re \[debug\] Does not work/,     'no debug message';
+like $content,   qr/$time_re \[foo\] $line_re Foo level/,        'right foo level';
 $content = decode 'UTF-8', path($file2)->slurp;
-like $content,   qr/\[.*\] \[t\/02-che.t:\d+\] Just works/,        'right error message';
+like $content,   qr/$time_re $line_re Just works/,        'right error message';
 eval {path($file3)->slurp};
 #~ like $@, qr/No such file or directory/, 'no debug file';
 is defined $@, 1, 'no debug file';
@@ -105,11 +108,11 @@ my $buffer = '';
   is scalar keys %{$log->handlers}, 2, 'right 2 handlers';
 }
 $content = decode 'UTF-8', $buffer;
-unlike $content, qr/^\[.*\] \[error\] \[t\/02-che.t:\d+\] Just works\n/m,        'right error message';
-like $content, qr/^\[.*\] \[info\] \[t\/02-che.t:\d+\] I ♥ Mojolicious\n/m, 'right info message';
-like $content, qr/^\[.*\] \[debug\] \[t\/02-che.t:\d+\] Works too\n/m,         'right debug message';
+unlike $content, qr/^$time_re \[e\] $line_re Just works\n/m,        'right error message';
+like $content, qr/^$time_re \[i\] $line_re I ♥ Mojolicious\n/m, 'right info message';
+like $content, qr/^$time_re \[d\] $line_re Works too\n/m,         'right debug message';
 $content = decode 'UTF-8', path($file)->slurp;
-like $content,   qr/^\[.*\] \[t\/02-che.t:\d+\] Уникод level/m,        'right Уникод message';
+like $content,   qr/^$time_re $line_re Уникод level/m,        'right Уникод message';
 undef $dir;
 
 # Logging to file + have default "paths" for levels+no trace
@@ -123,10 +126,10 @@ $log->foo('Foo level');
 is scalar keys %{$log->handlers}, 0, 'right 0 handlers';
 undef $log;
 $content = decode 'UTF-8', path($file)->slurp;
-like $content,   qr/\[.*\] \[error\] Just works/,        'right error message';
-like $content,   qr/\[.*\] \[fatal\] I ♥ Mojolicious/, 'right fatal message';
-unlike $content, qr/\[.*\] \[debug\] Does not work/,     'no debug message';
-like $content,   qr/\[.*\] \[foo\] Foo level/,        'right foo message';
+like $content,   qr/$time_re \[e\] Just works/,        'right error message';
+like $content,   qr/$time_re \[f\] I ♥ Mojolicious/, 'right fatal message';
+unlike $content, qr/$time_re \[d\] Does not work/,     'no debug message';
+like $content,   qr/$time_re \[foo\] Foo level/,        'right foo message';
 undef $dir;
 
 done_testing();
