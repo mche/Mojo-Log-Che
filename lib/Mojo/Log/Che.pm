@@ -211,7 +211,7 @@ See also parent L<Mojo::Log/"message">. Extends parent module logics for switchi
 
 =head1 ATTRIBUTES
 
-B<Mojo::Log::Che> inherits all attributes from L<Mojo::Log and implements the following new ones.
+B<Mojo::Log::Che> inherits all attributes from L<Mojo::Log> and implements the following new ones.
 
 =head2 handlers
 
