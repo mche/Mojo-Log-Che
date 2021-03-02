@@ -1,7 +1,7 @@
 # This Makefile is for the Mojo::Log::Che extension to perl.
 #
 # It was generated automatically by MakeMaker version
-# 7.24 (Revision: 72400) from the contents of
+# 7.36 (Revision: 73600) from the contents of
 # Makefile.PL. Don't edit this file, edit Makefile.PL instead.
 #
 #       ANY CHANGES MADE HERE WILL BE LOST!
@@ -62,11 +62,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = Mojo::Log::Che
 NAME_SYM = Mojo_Log_Che
-VERSION = 0.8121
+VERSION = 0.902
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_8121
+VERSION_SYM = 0_902
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.8121
+XS_VERSION = 0.902
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -143,9 +143,9 @@ PERM_DIR = 755
 PERM_RW = 644
 PERM_RWX = 755
 
-MAKEMAKER   = /home/guest/perl5/perlbrew/perls/perl-5.26.1/lib/5.26.1/ExtUtils/MakeMaker.pm
-MM_VERSION  = 7.24
-MM_REVISION = 72400
+MAKEMAKER   = /home/guest/perl5/perlbrew/perls/perl-5.26.1/lib/site_perl/5.26.1/ExtUtils/MakeMaker.pm
+MM_VERSION  = 7.36
+MM_REVISION = 73600
 
 # FULLEXT = Pathname for extension directory (eg Foo/Bar/Oracle).
 # BASEEXT = Basename part of FULLEXT. May be just equal FULLEXT. (eg Oracle)
@@ -191,12 +191,11 @@ PERL_ARCHIVEDEP    =
 PERL_ARCHIVE_AFTER = 
 
 
-TO_INST_PM = README.pod \
-	lib/Mojo/Log/Che.pm
+TO_INST_PM = lib/Mojo/Log/Che.pm
 
 
 # --- MakeMaker platform_constants section:
-MM_Unix_VERSION = 7.24
+MM_Unix_VERSION = 7.36
 PERL_MALLOC_DEF = -DPERL_EXTMALLOC_DEF -Dmalloc=Perl_malloc -Dfree=Perl_mfree -Drealloc=Perl_realloc -Dcalloc=Perl_calloc
 
 
@@ -262,7 +261,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = Mojo-Log-Che
-DISTVNAME = Mojo-Log-Che-0.8121
+DISTVNAME = Mojo-Log-Che-0.902
 
 
 # --- MakeMaker macro section:
@@ -496,7 +495,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) 'configure_requires:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  ExtUtils::MakeMaker: '\''0'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'dynamic_config: 1' >> META_new.yml
-	$(NOECHO) $(ECHO) 'generated_by: '\''ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.150010'\''' >> META_new.yml
+	$(NOECHO) $(ECHO) 'generated_by: '\''ExtUtils::MakeMaker version 7.36, CPAN::Meta::Converter version 2.150010'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'license: perl' >> META_new.yml
 	$(NOECHO) $(ECHO) 'meta-spec:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  url: http://module-build.sourceforge.net/META-spec-v1.4.html' >> META_new.yml
@@ -511,7 +510,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '  perl: '\''5.01'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'resources:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  repository: git://github.com/mche/Mojo-Log-Che.git' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: '\''0.8121'\''' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: '\''0.902'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'x_serialization_backend: '\''CPAN::Meta::YAML version 0.018'\''' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
@@ -521,13 +520,13 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      "ÐÐ¸ÑÐ°Ð¸Ð» Ð§Ðµ (Mikhail Che) <mche[-at-]cpan.org>"' >> META_new.json
 	$(NOECHO) $(ECHO) '   ],' >> META_new.json
 	$(NOECHO) $(ECHO) '   "dynamic_config" : 1,' >> META_new.json
-	$(NOECHO) $(ECHO) '   "generated_by" : "ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.150010",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "generated_by" : "ExtUtils::MakeMaker version 7.36, CPAN::Meta::Converter version 2.150010",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "license" : [' >> META_new.json
 	$(NOECHO) $(ECHO) '      "perl_5"' >> META_new.json
 	$(NOECHO) $(ECHO) '   ],' >> META_new.json
 	$(NOECHO) $(ECHO) '   "meta-spec" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",' >> META_new.json
-	$(NOECHO) $(ECHO) '      "version" : "2"' >> META_new.json
+	$(NOECHO) $(ECHO) '      "version" : 2' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "name" : "Mojo-Log-Che",' >> META_new.json
 	$(NOECHO) $(ECHO) '   "no_index" : {' >> META_new.json
@@ -562,8 +561,8 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '         "web" : "https://github.com/mche/Mojo-Log-Che"' >> META_new.json
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "0.8121",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "x_serialization_backend" : "JSON::PP version 2.27400_02"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "0.902",' >> META_new.json
+	$(NOECHO) $(ECHO) '   "x_serialization_backend" : "JSON::PP version 4.04"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -872,7 +871,7 @@ testdb_static :: static pure_all
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd :
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="Mojo-Log-Che" VERSION="0.8121">' > Mojo-Log-Che.ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="Mojo-Log-Che" VERSION="0.902">' > Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>Little child of great parent Mojo::Log.</ABSTRACT>' >> Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>ÐÐ¸ÑÐ°Ð¸Ð» Ð§Ðµ (Mikhail Che) &lt;mche[-at-]cpan.org&gt;</AUTHOR>' >> Mojo-Log-Che.ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> Mojo-Log-Che.ppd
@@ -888,7 +887,6 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  'README.pod' '$(INST_LIB)/Mojo/Log/README.pod' \
 	  'lib/Mojo/Log/Che.pm' 'blib/lib/Mojo/Log/Che.pm' 
 	$(NOECHO) $(TOUCH) pm_to_blib
 

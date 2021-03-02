@@ -11,11 +11,14 @@ my $line_re = qr/\d+〉t\/02-che.t:\d+/;
 
 # Logging to folder
 my $dir  = tempdir();
-my $log  = Mojo::Log::Che->new(level => 'error', path => $dir);
+my $log  = Mojo::Log::Che->new(level => 'error', path => $dir);#
 $log->error('Just works');
 $log->fatal('I ♥ Mojolicious');
 $log->debug('Does not work');
 $log->foo('Foo level');
+my $log_context = $log->context('[CONTEXT]');
+$log_context->error('It does contexted');
+undef $log_context;
 is scalar keys %{$log->handlers}, 3, 'right 3 handlers';
 my $ls = `ls $dir`;
 #~ warn "[$ls]";
@@ -25,11 +28,13 @@ unlike $ls, qr/debug\.log/, 'exists debug.log file ';
 like $ls, qr/foo\.log/, 'right file ';
 undef $log;
 my $content_err = decode 'UTF-8', path("$dir/error.log")->slurp;
+#~ warn $content_err;
 my $content_i = decode 'UTF-8', path("$dir/fatal.log")->slurp;
 my $content_foo = decode 'UTF-8', path("$dir/foo.log")->slurp;
-like $content_err,   qr/$time_re $line_re Just works/,        'right error message';
-like $content_i,   qr/$time_re $line_re I ♥ Mojolicious/, 'right info message';
-like $content_foo,   qr/$time_re $line_re Foo level/,        'right foo message';
+like $content_err,   qr/$time_re\s+$line_re\s+Just works/,        'right error message';
+like $content_err,   qr/$time_re\s+$line_re\s+\[CONTEXT\]/,        'right context message';
+like $content_i,   qr/$time_re\s+$line_re\s+I ♥ Mojolicious/, 'right info message';
+like $content_foo,   qr/$time_re\s+$line_re\s+Foo level/,        'right foo message';
 eval {path("$dir/debug.log")->slurp};
 like $@, qr/No such file or directory/, 'no debug file';
 is defined $@, 1, 'no debug file';
@@ -50,9 +55,9 @@ undef $log;
 $content_err = decode 'UTF-8', path("$dir/err.log")->slurp;
 my $content_bar = decode 'UTF-8', path("$dir/bar.log")->slurp;
 $content_i = decode 'UTF-8', path("$dir/fatal.log")->slurp;
-like $content_i,   qr/$time_re $line_re I ♥ Mojolicious/, 'right fatal message';
-like $content_err,   qr/$time_re $line_re Just works/,        'right error message';
-like $content_bar,   qr/$time_re $line_re Foo level/,        'right foo message';
+like $content_i,   qr/$time_re\s+$line_re\s+I ♥ Mojolicious/, 'right fatal message';
+like $content_err,   qr/$time_re\s+$line_re\s+Just works/,        'right error message';
+like $content_bar,   qr/$time_re\s+$line_re\s+Foo level/,        'right foo message';
 undef $dir;
 
 # Logging to file + have default "paths" for levels

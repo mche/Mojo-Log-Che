@@ -13,14 +13,25 @@ use Mojo::Util 'encode';
 has paths => sub { {} };
 has handlers => sub { {} };
 has trace => 4;
+#~ has parent => undef, weak => 1;
 
 # Standard log levels
 my %LEVEL = (debug => 1, info => 2, warn => 3, error => 4, fatal => 5);
 
 sub new {
   my $self = shift->SUPER::new(format => \&_format, @_);
-  $self->unsubscribe('message')->on(message => \&_message);
+  $self->unsubscribe('message');
+  $self->on(message => \&_message);
   return $self;
+}
+
+sub context {# override
+  my ($self, @context) = @_;
+  #~ push @{ $self->{context} ||= [] }, @context;
+  $self->{context} = \@context
+    if @context;
+  return $self;
+  #~ return $self->new(parent => $self->parent || $self, context => \@context, level => $self->level);
 }
 
 sub handler {
@@ -47,7 +58,7 @@ sub handler {
     $file = $path_level;
   }
   else {
-    #~ croak "Cant create log handler for level=[$level] and path=[$path] (also check filesystem permissions)";
+    #~ warn "Cant create log handler for level=[$level] and path=[$path] (also check filesystem permissions)";
     return; # Parent way to handle
   }
   
@@ -79,8 +90,6 @@ sub _format {
   my ($sec,$min,$hour,$mday,$mon,$year,$wday) = localtime($time);
   $time = sprintf "%s %s %s:%s:%s", $mday, map(length == 1 ? "0$_" : $_, $mon[$mon], $hour, $min, $sec);#$wday[$wday], 
   
-  #~ my $trace =  '['. join(" ", @{_trace()}[1..2]) .']';
-  
   return "$time $level" . join "\n", @_, '';
 }
 
@@ -99,8 +108,11 @@ sub _trace {
 }
 
 
+
 sub _message {
   my ($self, $level) = (shift, shift);
+  
+  #~ warn @{$self->{context}} if $self->{context};
 
   return unless !$LEVEL{$level} || $self->is_level($level);
 
@@ -109,6 +121,11 @@ sub _message {
   my $time = time;
   my $trace = _trace($self->trace)
     if $self->trace;
+  
+  splice(@_,0, scalar @{$self->{context}},)
+    and $_[0]= join(' ', @{$self->{context}}, $_[0])
+    if $self->{context};
+
   unshift @_, "$$〉". join(":", @$trace[$$trace[0] eq 'main' ? (1,2) : (0,2)]). ' ' . shift
     if $trace && @$trace;
   push @$history, my $msg = [$time, $level, @_];
@@ -130,11 +147,11 @@ sub AUTOLOAD {
   Carp::croak "Undefined log level(subroutine) &${package}::$method called"
     unless Scalar::Util::blessed $self && $self->isa(__PACKAGE__);
 
-  return $self->_log(@_ , $method);
+  return $self->_log(@_, $method);
   
 }
 
-our $VERSION = '0.8121';# as to Mojolicious version/10+<child minor>
+our $VERSION = '0.902';# as to Mojolicious version/10+<child minor>
 
 =encoding utf8
 
@@ -146,7 +163,7 @@ I<¡ ¡ ¡ ALL GLORY TO GLORIA ! ! !>
 
 =head1 VERSION
 
-0.8121 (up to Mojolicious version/10+C<child minor>)
+0.902 (up to Mojolicious version/10+C<child minor>)
 
 =head1 NAME
 
